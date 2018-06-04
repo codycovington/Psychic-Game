@@ -10,66 +10,72 @@ var letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", 
 var lettersGuessed =[];
 
 
-// Begin event listening function
-document.onkeyup = function(event) {
+function startGame() {
+
+    // Computer guesses a random letter from the letters array and logs it
+    var computerGuess = letters[Math.floor(Math.random()*letters.length)];
+    console.log("Computer chose " + computerGuess);
+
+    // Begin event listening function
+    document.onkeyup = function(event) {
     
-    
-// Computer guesses a random letter from the letters array and logs it
-var computerGuess = letters[Math.floor(Math.random()*letters.length)];
-console.log("Computer chose " + computerGuess);
+    // Accept user input, push pressed letter to the lettersGuessed array and decrement the guessLimit
+    var userGuess = event.key;
 
+    lettersGuessed.push(userGuess);
 
-// Accept user input, push pressed letter to the lettersGuessed array and decrement the guessLimit
-var userGuess = event.key;
+    guessLimit--;
 
-lettersGuessed.push(userGuess);
+    // Determine the outcome and invoke RESET function to clear counters and array
 
-guessLimit--;
+    if (userGuess === computerGuess) {
+        alert("YOU WIN!!!");
+        numWins++;
 
-// Determine the outcome and invoke RESET function to clear counters and array
-
-if (userGuess === computerGuess) {
-    alert("YOU WIN!!!");
-    numWins++;
-
-    function reset() {
-        guessLimit = 9;
-        lettersGuessed.length = 0;
-
-    document.querySelector("#game").innerHTML = html;
+        //Function to reset values back to start
+        function reset() {
+            guessLimit = 9;
+            lettersGuessed.length = 0;
+            startGame(); 
+            
+        document.querySelector("#game").innerHTML = html;
         
-    };
+        };
     
-    reset();
+        reset();
    
-}
+    }
 
-if (guessLimit === 0) {
-    alert("YOU LOSE!!!");
-    numLosses++;
+    if (guessLimit === 0) {
+        alert("YOU LOSE!!!");
+        numLosses++;
 
-    function reset() {
-        guessLimit = 9;
-        lettersGuessed.length = 0;
+        function reset() {
+            guessLimit = 9;
+            lettersGuessed.length = 0;
+            startGame();
+            
+
+        document.querySelector("#game").innerHTML = html;
+        
+        };
+
+        reset();
+    }
+
+
+    //Display html and add in JS elements as game progresses
+    var html = 
+    "<br>" +
+    "<p>Wins:  " + "<strong>" + numWins + "</strong>" + "</p>" +
+    "<p>Losses:  " + "<strong>" + numLosses + "</strong>" + "</p>" +
+    "<p>Letters guessed:  " + "<strong>" + lettersGuessed + "</strong>" + "</p>" +
+    "<p>Number of guesses left:  " + "<strong>" + guessLimit + "</strong>" + "</p>";
 
     document.querySelector("#game").innerHTML = html;
-        
-    };
-
-    reset();
-}
-
-
-//Display html and add in JS elements as game progresses
-var html = 
-"<br>" +
-"<p>Wins:  " + "<strong>" + numWins + "</strong>" + "</p>" +
-"<p>Losses:  " + "<strong>" + numLosses + "</strong>" + "</p>" +
-"<p>Letters guessed:  " + "<strong>" + lettersGuessed + "</strong>" + "</p>" +
-"<p>Number of guesses left:  " + "<strong>" + guessLimit + "</strong>" + "</p>";
-
-document.querySelector("#game").innerHTML = html;
-
-
-
 };
+};
+
+//Begin the game
+startGame();
+
